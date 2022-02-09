@@ -15,9 +15,11 @@ import SocialButton from '../../components/SocialButton';
 
 // assets
 import images from '../../constants/images';
+import {NAVIGATION} from '../../navigation/navigation';
 
 // context
 import {AuthContext} from '../../navigation/AuthProvider';
+import NavigationService from '../../navigation/NavigationService';
 
 const SigninScreen = ({navigation}) => {
   const {signup} = useContext(AuthContext);
@@ -87,7 +89,7 @@ const SigninScreen = ({navigation}) => {
         <Text style={styles.navButtonText}>Don't have an acount? </Text>
         <TouchableOpacity
           style={styles.forgotButton}
-          onPress={() => navigation.navigate('Signup')}>
+          onPress={() => navigation.navigate(NAVIGATION.SIGNUP)}>
           <Text style={[styles.navButtonText, {color: 'red'}]}>
             Create here
           </Text>

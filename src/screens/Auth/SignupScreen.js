@@ -1,92 +1,169 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
-  Image,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 
 // components
 import FormButton from '../../components/FormButton';
 import FormInput from '../../components/FormInput';
 import SocialButton from '../../components/SocialButton';
+import {NAVIGATION} from '../../navigation/navigation';
+
+// Import Context
+import {AuthContext} from '../../navigation/AuthProvider';
 
 // Firebase
+import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import NavigationService from '../../navigation/NavigationService';
 
 const SignupScreen = ({navigation}) => {
+  // States
   const [data, setData] = useState({
+    name: {value: '', error: '', isValid: false},
     email: {value: '', error: '', isValid: false},
+    mobileno: {value: '', error: '', isValid: false},
     password: {value: '', error: '', isValid: false},
     repassword: {value: '', error: '', isValid: false},
   });
 
   const [isDisabled, setIsDisabled] = useState(true);
 
+  // Context
+  const {signup} = useContext(AuthContext);
+
   // collection
   const usersCollection = firestore().collection('Users');
 
   const HandlerLogin = async () => {
-    let collection = {...data};
+    let nameValue = data.name.value;
+    let emailValue = data.email.value;
+    let mobilenoValue = data.mobileno.value;
+    let passwordValue = data.password.value;
+    let repassword = data.repassword.value;
 
-    let emailValue = collection.email.value;
-    let passwordValue = collection.password.value;
-    let repassword = collection.repassword.value;
-    console.log(collection);
+    if (
+      nameValue &&
+      emailValue &&
+      mobilenoValue &&
+      passwordValue &&
+      repassword
+    ) {
+      await signup(emailValue, passwordValue);
+    }
   };
 
   useEffect(() => {
     VisibleButton();
   }, [{...data}]);
 
+  // If check error are receive that button is disable or not
   const VisibleButton = () => {
-    let emailValue = data.email.value;
-    let passwordValue = data.password.value;
-    let repassword = data.repassword.value;
+    let nameErr = data.name.error;
+    let emailErr = data.email.error;
+    let mobileErr = data.mobileno.error;
+    let passwordErr = data.password.error;
+    let repasswordErr = data.repassword.error;
 
-    if (emailValue && passwordValue && repassword) {
+    if (
+      nameErr == null &&
+      emailErr == null &&
+      mobileErr == null &&
+      passwordErr == null &&
+      repasswordErr == null
+    ) {
       setIsDisabled(false);
     } else {
       setIsDisabled(true);
     }
   };
 
+  // Name Validation here...
+  const nameHandler = () => {
+    const {value} = data.name;
+
+    const reg = /^[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,}$/;
+    if (reg.test(value)) {
+      setData({
+        ...data,
+        name: {
+          ...data.name,
+          isValid: true,
+        },
+      });
+    } else {
+      setData({
+        ...data,
+        name: {
+          value: value,
+          error: 'Enter Valid Name',
+          isValid: false,
+        },
+      });
+    }
+  };
+
   // Email Validation here...
   const emailHandler = () => {
-    let collection = {...data};
-    let emailValue = collection.email.value;
+    const {value} = data.email;
 
-    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-    if (reg.test(emailValue) === false) {
+    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (reg.test(value) === false) {
       setData({
         ...data,
         email: {
-          value: emailValue,
+          value: value,
           error: 'Please! Enter Valid Email',
           isValid: false,
         },
       });
     } else {
-      setData({...data, email: {value: emailValue, error: ' ', isValid: true}});
+      setData({...data, email: {...data.email, isValid: true}});
+    }
+  };
+
+  // Mobile No Validation Here...
+  const mobileHandler = () => {
+    const {value} = data.mobileno;
+
+    const reg = /^[0]?[789]\d{9}$/;
+    if (reg.test(value) == false) {
+      setData({
+        ...data,
+        mobileno: {
+          value: value,
+          error: 'Please! enter valid mobile number',
+          isValid: false,
+        },
+      });
+    } else {
+      setData({
+        ...data,
+        mobileno: {
+          ...data.mobileno,
+          isValid: true,
+        },
+      });
     }
   };
 
   // Password Validation
   const passwordHandler = () => {
-    let collection = {...data};
-    let passwordValue = collection.password.value;
-    let repasswordValue = collection.repassword.value;
+    const {value} = data.password;
 
     // Check length of password
-    let passwordSize = passwordValue.length;
+    let passwordSize = value.length;
 
     if (passwordSize == 0) {
       setData({
         ...data,
         password: {
-          value: passwordValue,
+          value: value,
           error: 'Password is required feild',
           isValid: false,
         },
@@ -95,7 +172,7 @@ const SignupScreen = ({navigation}) => {
       setData({
         ...data,
         password: {
-          value: passwordValue,
+          value: value,
           error: 'Password should be min 8 char and max 20 char',
           isValid: false,
         },
@@ -104,8 +181,7 @@ const SignupScreen = ({navigation}) => {
       setData({
         ...data,
         password: {
-          value: passwordValue,
-          error: ' ',
+          ...data.password,
           isValid: true,
         },
       });
@@ -114,9 +190,8 @@ const SignupScreen = ({navigation}) => {
 
   // Repassword Validation
   const rePasswordHandler = () => {
-    let collection = {...data};
-    let passwordValue = collection.password.value;
-    let repasswordValue = collection.repassword.value;
+    let passwordValue = data.password.value;
+    let repasswordValue = data.repassword.value;
 
     let passwordSize = repasswordValue.length;
 
@@ -150,7 +225,7 @@ const SignupScreen = ({navigation}) => {
     } else {
       setData({
         ...data,
-        repassword: {value: repasswordValue, error: ' ', isValid: true},
+        repassword: {...data.repassword, isValid: true},
       });
     }
   };
@@ -159,6 +234,25 @@ const SignupScreen = ({navigation}) => {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.text}>Create an Account</Text>
 
+      {/* Name Field Here  */}
+      <FormInput
+        labelValue={data.name.value}
+        onChangeText={text => setData({...data, name: {value: text}})}
+        onBlur={nameHandler}
+        placeholderText="Name"
+        iconType="user"
+        keyboardType="default"
+        autoCapitalize="none"
+        autoCorrect={false}
+      />
+
+      <View style={{width: '100%', marginBottom: 5}}>
+        <Text style={{color: 'red', fontSize: 12, fontWeight: 'bold'}}>
+          {data.name.error}
+        </Text>
+      </View>
+
+      {/* Email Field Here  */}
       <FormInput
         labelValue={data.email.value}
         onChangeText={text => {
@@ -166,7 +260,7 @@ const SignupScreen = ({navigation}) => {
         }}
         onBlur={emailHandler}
         placeholderText="Email"
-        iconType="user"
+        iconType="mail"
         keyboardType="email-address"
         autoCapitalize="none"
         autoCorrect={false}
@@ -177,6 +271,26 @@ const SignupScreen = ({navigation}) => {
         </Text>
       </View>
 
+      {/* Mobileno Field Here  */}
+      <FormInput
+        labelValue={data.mobileno.value}
+        onChangeText={text => {
+          setData({...data, mobileno: {value: text}});
+        }}
+        onBlur={mobileHandler}
+        placeholderText="Mobile No"
+        iconType="phone"
+        keyboardType="number-pad"
+        autoCapitalize="none"
+        autoCorrect={false}
+      />
+      <View style={{width: '100%', marginBottom: 5}}>
+        <Text style={{color: 'red', fontSize: 12, fontWeight: 'bold'}}>
+          {data.mobileno.error}
+        </Text>
+      </View>
+
+      {/* Password field Here  */}
       <FormInput
         labelValue={data.password.value}
         onChangeText={text => {
@@ -193,6 +307,7 @@ const SignupScreen = ({navigation}) => {
         </Text>
       </View>
 
+      {/* Repassword  field Here  */}
       <FormInput
         labelValue={data.repassword.value}
         onChangeText={text => {
@@ -218,11 +333,13 @@ const SignupScreen = ({navigation}) => {
 
       <View style={styles.textPrivate}>
         <Text>By registering, you confirm that you accept out </Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => Linking.openURL('https://hops.healthcare/blogs/')}>
           <Text style={[styles.color_textPrivate]}>Terms of service </Text>
         </TouchableOpacity>
         <Text>and </Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => Linking.openURL('mailto:lalakanji0001@gmail.com')}>
           <Text style={[styles.color_textPrivate]}>Privacy Policy</Text>
         </TouchableOpacity>
       </View>
@@ -255,7 +372,7 @@ const SignupScreen = ({navigation}) => {
         <Text style={styles.navButtonText}>Have an account ? </Text>
         <TouchableOpacity
           style={styles.forgotButton}
-          onPress={() => navigation.navigate('Signin')}>
+          onPress={() => navigation.navigate(NAVIGATION.SIGNIN)}>
           <Text style={[styles.navButtonText, {color: 'red'}]}>Sign In</Text>
         </TouchableOpacity>
       </View>

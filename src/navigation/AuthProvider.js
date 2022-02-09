@@ -1,7 +1,10 @@
 import React, {createContext, useState} from 'react';
-import auth from '@react-native-firebase/auth';
 import NavigationService from './NavigationService';
+
+// Firebase
+import auth from '@react-native-firebase/auth';
 import {signUpWithEmail} from '../util/firebase';
+import {NAVIGATION} from './navigation';
 
 export const AuthContext = createContext({});
 
@@ -16,7 +19,9 @@ export const AuthProvider = ({children}) => {
         signup: async (email, password) => {
           try {
             const valid = await signUpWithEmail(email, password);
-            NavigationService.navigate('Signin', {
+            NavigationService.navigate(NAVIGATION.SIGNIN, {
+              email,
+              password,
               valid,
             });
           } catch (e) {

@@ -8,7 +8,7 @@ import SplashScreen from '../screens/OnBoardingScreen/SplashScreen';
 import OnBoardingScreen from '../screens/OnBoardingScreen/OnBoardingScreen';
 import SigninScreen from '../screens/Auth/SigninScreen';
 import SignupScreen from '../screens/Auth/SignupScreen';
-import Icon from 'react-native-fontawesome';
+import {NAVIGATION} from '../navigation/navigation';
 
 const Stack = createStackNavigator();
 
@@ -33,14 +33,17 @@ const StackNavigator = () => {
     return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Splash"
+          initialRouteName={NAVIGATION.SPLASH}
           screenOptions={{
             headerShown: false,
           }}>
-          <Stack.Screen name="Splash" component={SplashScreen} />
-          <Stack.Screen name="OnBoarding" component={OnBoardingScreen} />
-          <Stack.Screen name="Signin" component={SigninScreen} />
-          <Stack.Screen name="Signup" component={SignupScreen} />
+          <Stack.Screen name={NAVIGATION.SPLASH} component={SplashScreen} />
+          <Stack.Screen
+            name={NAVIGATION.ONBOARDING}
+            component={OnBoardingScreen}
+          />
+          <Stack.Screen name={NAVIGATION.SIGNIN} component={SigninScreen} />
+          <Stack.Screen name={NAVIGATION.SIGNUP} component={SignupScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
@@ -52,18 +55,21 @@ const StackNavigator = () => {
           screenOptions={{
             headerShown: false,
           }}>
-          <Stack.Screen name="OnBoarding" component={OnBoardingScreen} />
-          <Stack.Screen name="Splash" component={SplashScreen} />
-          <Stack.Screen name="Signin" component={SigninScreen} />
           <Stack.Screen
-            name="Signup"
+            name={NAVIGATION.ONBOARDING}
+            component={OnBoardingScreen}
+          />
+          <Stack.Screen name={NAVIGATION.SPLASH} component={SplashScreen} />
+          <Stack.Screen name={NAVIGATION.SIGNIN} component={SigninScreen} />
+          <Stack.Screen
+            name={NAVIGATION.SIGNUP}
             component={SignupScreen}
             options={{
-              title: 'Sign in',
               headerShown: 'true',
               headerStyle: {
-                backgroundColor: '#cece',
+                backgroundColor: '#f2f2f2',
               },
+              headerTintColor: '#666',
             }}
           />
         </Stack.Navigator>

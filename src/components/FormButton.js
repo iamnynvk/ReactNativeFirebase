@@ -10,7 +10,6 @@ const {height, width} = Dimensions.get('window');
 
 const FormButton = props => {
   const {buttonTitle, disabled, onPress, ...rest} = props;
-  console.log('check', disabled);
   return (
     <TouchableOpacity disabled={disabled} onPress={onPress}>
       <View
