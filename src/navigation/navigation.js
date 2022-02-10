@@ -3,4 +3,5 @@ export const NAVIGATION = {
   SPLASH: 'Splash',
   SIGNIN: 'Signin',
   SIGNUP: 'Signup',
+  HOME: 'Home',
 };

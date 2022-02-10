@@ -6,7 +6,9 @@ import {
   ScrollView,
   TouchableOpacity,
   Linking,
+  ToastAndroid,
 } from 'react-native';
+import ProgressDialog from 'react-native-progress-dialog';
 
 // components
 import FormButton from '../../components/FormButton';
@@ -16,11 +18,6 @@ import {NAVIGATION} from '../../navigation/navigation';
 
 // Import Context
 import {AuthContext} from '../../navigation/AuthProvider';
-
-// Firebase
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import NavigationService from '../../navigation/NavigationService';
 
 const SignupScreen = ({navigation}) => {
   // States
@@ -33,20 +30,25 @@ const SignupScreen = ({navigation}) => {
   });
 
   const [isDisabled, setIsDisabled] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   // Context
-  const {signup} = useContext(AuthContext);
+  const {signup, signUpData} = useContext(AuthContext);
 
-  // collection
-  const usersCollection = firestore().collection('Users');
+  // set Toast in Android
+  const showToast = () => {
+    ToastAndroid.show('Registration Successfully', ToastAndroid.SHORT);
+  };
 
   const HandlerLogin = async () => {
+    setVisible(true);
     let nameValue = data.name.value;
     let emailValue = data.email.value;
     let mobilenoValue = data.mobileno.value;
     let passwordValue = data.password.value;
     let repassword = data.repassword.value;
 
+    // Store data in firestore of firebase
     if (
       nameValue &&
       emailValue &&
@@ -54,7 +56,16 @@ const SignupScreen = ({navigation}) => {
       passwordValue &&
       repassword
     ) {
-      await signup(emailValue, passwordValue);
+      setVisible(true);
+      // signup here
+      signup(emailValue, passwordValue);
+      // data store in firestore
+      signUpData(nameValue, emailValue, mobilenoValue);
+      setTimeout(() => {
+        showToast();
+        navigation.navigate(NAVIGATION.SIGNIN);
+        setVisible(false);
+      }, 2000);
     }
   };
 
@@ -232,6 +243,11 @@ const SignupScreen = ({navigation}) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <ProgressDialog
+        visible={visible}
+        label="Please Wait..."
+        loaderColor="black"
+      />
       <Text style={styles.text}>Create an Account</Text>
 
       {/* Name Field Here  */}

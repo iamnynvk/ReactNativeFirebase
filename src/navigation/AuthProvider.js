@@ -1,10 +1,10 @@
 import React, {createContext, useState} from 'react';
-import NavigationService from './NavigationService';
 
-// Firebase
-import auth from '@react-native-firebase/auth';
-import {signUpWithEmail} from '../util/firebase';
-import {NAVIGATION} from './navigation';
+import {
+  signUpWithEmail,
+  signUpStoreData,
+  signInWithEmail,
+} from '../util/firebase';
 
 export const AuthContext = createContext({});
 
@@ -18,14 +18,25 @@ export const AuthProvider = ({children}) => {
         setAuthUser,
         signup: async (email, password) => {
           try {
-            const valid = await signUpWithEmail(email, password);
-            NavigationService.navigate(NAVIGATION.SIGNIN, {
-              email,
-              password,
-              valid,
-            });
+            await signUpWithEmail(email, password);
           } catch (e) {
-            console.log('error', e);
+            console.log('Sign up - error', e);
+          }
+        },
+
+        signUpData: async (name, email, mobile) => {
+          try {
+            await signUpStoreData(name, email, mobile);
+          } catch (e) {
+            console.log('Sign in Data Store - error', e);
+          }
+        },
+
+        login: async (email, password) => {
+          try {
+            await signInWithEmail(email, password);
+          } catch (e) {
+            console.log('Sign in - error', e);
           }
         },
       }}>

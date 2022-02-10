@@ -1,11 +1,8 @@
-import React from 'react';
-import {Alert, Text} from 'react-native';
-import AwesomeAlert from 'react-native-awesome-alerts';
-import NavigationService from '../navigation/NavigationService';
-import {NAVIGATION} from '../navigation/navigation';
+import {Alert, ToastAndroid} from 'react-native';
 
 // Firebase
-import auth, {firebase} from '@react-native-firebase/auth';
+import auth, {firebase, getAuth} from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const firebaseAuth = auth();
 
@@ -21,26 +18,54 @@ export const signUpWithEmail = (email, password) => {
     firebaseAuth
       .createUserWithEmailAndPassword(email, password)
       .then(conformResult => {
+        conformResult.user.sendEmailVerification();
+        ToastAndroid.show('Email Sent Successfully', ToastAndroid.LONG);
         resolve(conformResult);
-        Alert.alert(
-          'Successfully',
-          `Your Email is ${email} Successfully Register`,
-          [
-            {
-              text: 'OK',
-              onPress: () =>
-                NavigationService.navigate(NAVIGATION.SIGNIN, {
-                  email,
-                  password,
-                }),
-            },
-          ],
-        );
       })
       .catch(error => {
-        Alert.alert('Error', `${email}`, [
-          {text: 'OK', onPress: () => console.log('issue clicked Ok')},
-        ]);
+        Alert.alert('Issue with sign up', error.message);
+        reject(error);
+      });
+  });
+};
+
+/**
+ *
+ * @param name - providing name and store cloude in firebase
+ * @param email - providing email and store cloude in firebase
+ * @param mobile -  providing mobile and store cloude in firebase
+ * @returns
+ */
+
+export const signUpStoreData = (name, email, mobile) => {
+  return new Promise((resolve, reject) => {
+    firestore()
+      .collection('Users')
+      .add({
+        name: name,
+        email: email,
+        mobile: mobile,
+      })
+      .then(conformResult => {
+        resolve(conformResult);
+        ToastAndroid.show('Registration Sucessfully...', ToastAndroid.SHORT);
+      })
+      .catch(error => {
+        Alert.alert('Issue with Registration', error.message);
+        reject(error);
+      });
+  });
+};
+
+export const signInWithEmail = (email, password) => {
+  return new Promise((resolve, reject) => {
+    firebaseAuth
+      .signInWithEmailAndPassword(email, password)
+      .then(conformResult => {
+        resolve(conformResult);
+      })
+      .catch(error => {
+        Alert.alert('Issue with Login', error.message);
         reject(error);
       });
   });

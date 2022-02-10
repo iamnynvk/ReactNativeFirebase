@@ -9,8 +9,7 @@ LogBox.ignoreLogs([
 ]);
 
 const App = () => {
-  // return <Providers />;
-  return <FirebaseDummy />;
+  return <Providers />;
 };
 
 export default App;

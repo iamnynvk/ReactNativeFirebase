@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import ProgressDialog from 'react-native-progress-dialog';
 
 // components
 import FormButton from '../../components/FormButton';
@@ -19,22 +20,30 @@ import {NAVIGATION} from '../../navigation/navigation';
 
 // context
 import {AuthContext} from '../../navigation/AuthProvider';
-import NavigationService from '../../navigation/NavigationService';
 
 const SigninScreen = ({navigation}) => {
-  const {signup} = useContext(AuthContext);
+  const {login} = useContext(AuthContext);
 
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [visible, setVisible] = useState(false);
 
   const HandlerLogin = async () => {
-    if (email != null && password != null) {
-      await signup(email, password);
-    }
+    setVisible(true);
+    setTimeout(() => {
+      login(email, password);
+      setVisible(false);
+      navigation.replace(NAVIGATION.HOME);
+    }, 1000);
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <ProgressDialog
+        visible={visible}
+        label="Please Wait..."
+        loaderColor="black"
+      />
       <Image source={images.logo} style={styles.logo} />
 
       <FormInput

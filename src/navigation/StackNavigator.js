@@ -8,6 +8,7 @@ import SplashScreen from '../screens/OnBoardingScreen/SplashScreen';
 import OnBoardingScreen from '../screens/OnBoardingScreen/OnBoardingScreen';
 import SigninScreen from '../screens/Auth/SigninScreen';
 import SignupScreen from '../screens/Auth/SignupScreen';
+import Homescreen from '../screens/Home/Homescreen';
 import {NAVIGATION} from '../navigation/navigation';
 
 const Stack = createStackNavigator();
@@ -44,6 +45,7 @@ const StackNavigator = () => {
           />
           <Stack.Screen name={NAVIGATION.SIGNIN} component={SigninScreen} />
           <Stack.Screen name={NAVIGATION.SIGNUP} component={SignupScreen} />
+          <Stack.Screen name={NAVIGATION.HOME} component={Homescreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
@@ -72,6 +74,7 @@ const StackNavigator = () => {
               headerTintColor: '#666',
             }}
           />
+          <Stack.Screen name={NAVIGATION.HOME} component={Homescreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );

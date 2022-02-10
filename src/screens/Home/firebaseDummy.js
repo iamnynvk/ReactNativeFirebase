@@ -7,10 +7,10 @@ import firestore from '@react-native-firebase/firestore';
 const firebaseDummy = () => {
   const [userData, setUserData] = useState({
     user: {
-      name: '',
-      email: '',
-      mobileno: '',
-      password: '',
+      name: 'Vekariya Nayan',
+      email: 'vekariyanayan2000@gmail.com',
+      mobileno: '9106266564',
+      password: 'Nayan@123',
     },
   });
 
@@ -20,7 +20,8 @@ const firebaseDummy = () => {
     // getFilterData();
     // orderByData();
     // writeData();
-    writeDataWithID();
+    // writeDataWithID();
+    updateData();
   }, []);
 
   // perticular one data from firestore getting in firestore
@@ -86,7 +87,7 @@ const firebaseDummy = () => {
 
   // HERE FIREBASE DATA WRITTEN START
 
-  // Firebase Data Write - new generated id in firebase
+  // Firebase Data Write - new generated id  & add section using (.add) in firebase
   const writeData = async () => {
     firestore()
       .collection('Users')
@@ -95,11 +96,11 @@ const firebaseDummy = () => {
         degree: 'MCA',
       })
       .then(() => {
-        console.log('Data Updated');
+        console.log('Data Updated using .add()');
       });
   };
 
-  // Firebase Data Write - exsiting generated id in firebase
+  // Firebase Data Write set Data - exsiting generated id in firebase & set data old data are removing and new data are adding using (.set)
   const writeDataWithID = async () => {
     firestore()
       .collection('Users')
@@ -108,7 +109,23 @@ const firebaseDummy = () => {
         mark: '700',
       })
       .then(() => {
-        console.log('Data Updated');
+        console.log('Data Updated using .set()');
+      });
+  };
+
+  // Perticular id data update in firestore of firebase using (.update)
+
+  const updateData = async () => {
+    await firestore()
+      .collection('Users')
+      .doc('Ino9ma1Ns0QE8VyRT3Ha')
+      .update({
+        name: 'Pankaj Bhai Vekariya',
+        email: 'pankajvekariya@gmail.com',
+        age: '30',
+      })
+      .then(() => {
+        console.log('Data Updated using .update()');
       });
   };
 
