@@ -4,17 +4,22 @@ import {
   signUpWithEmail,
   signUpStoreData,
   signInWithEmail,
+  logOut,
 } from '../util/firebase';
+import {NAVIGATION} from './navigation';
 
 export const AuthContext = createContext({});
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = ({children, Navigation}) => {
   const [authUser, setAuthUser] = useState(null);
+  const [user, setUser] = useState(null);
 
   return (
     <AuthContext.Provider
       value={{
         authUser,
+        user,
+        setUser,
         setAuthUser,
         signup: async (email, password) => {
           try {
@@ -37,6 +42,15 @@ export const AuthProvider = ({children}) => {
             await signInWithEmail(email, password);
           } catch (e) {
             console.log('Sign in - error', e);
+          }
+        },
+
+        logout: async () => {
+          try {
+            await logOut();
+            Navigation.replace(NAVIGATION.SIGNIN);
+          } catch (e) {
+            console.log(e);
           }
         },
       }}>

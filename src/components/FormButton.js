@@ -24,7 +24,7 @@ const FormButton = props => {
 const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 30,
-    width: width,
+    width: width / 1.1,
     height: height / 15,
     backgroundColor: '#2e64e5',
     padding: 10,

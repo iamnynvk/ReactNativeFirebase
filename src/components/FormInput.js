@@ -31,7 +31,7 @@ const FormInput = ({
 const styles = StyleSheet.create({
   inputContainer: {
     marginTop: 20,
-    marginBottom: 10,
+    marginBottom: 3,
     width: '100%',
     height: width / 7,
     borderColor: '#ccc',

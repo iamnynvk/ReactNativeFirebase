@@ -57,6 +57,13 @@ export const signUpStoreData = (name, email, mobile) => {
   });
 };
 
+/**
+ *
+ * @param email  valid email or not check after login
+ * @param password valid password or not chack after login
+ * @returns
+ */
+
 export const signInWithEmail = (email, password) => {
   return new Promise((resolve, reject) => {
     firebaseAuth
@@ -67,6 +74,24 @@ export const signInWithEmail = (email, password) => {
       .catch(error => {
         Alert.alert('Issue with Login', error.message);
         reject(error);
+      });
+  });
+};
+
+/**
+ * @returns logOut - user logout using firebase
+ */
+
+export const logOut = () => {
+  return new Promise((resolve, reject) => {
+    firebaseAuth
+      .signOut()
+      .then(conformResult => {
+        resolve(conformResult);
+      })
+      .catch(error => {
+        reject(error);
+        console.log(error);
       });
   });
 };

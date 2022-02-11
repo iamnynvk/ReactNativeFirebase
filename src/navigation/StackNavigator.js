@@ -13,8 +13,25 @@ import {NAVIGATION} from '../navigation/navigation';
 
 const Stack = createStackNavigator();
 
+// Firebase
+import auth from '@react-native-firebase/auth';
+
 const StackNavigator = () => {
   const [isFirstlaunch, setIsFirstLaunch] = useState(false);
+
+  // Firebase Auth checker
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
 
   useEffect(() => {
     AsyncStorage.getItem('alreadyLaunch').then(value => {
@@ -27,6 +44,10 @@ const StackNavigator = () => {
       }
     });
   }, [isFirstlaunch]);
+
+  if (initializing) {
+    return null;
+  }
 
   if (isFirstlaunch === null) {
     return null;
@@ -45,6 +66,17 @@ const StackNavigator = () => {
           />
           <Stack.Screen name={NAVIGATION.SIGNIN} component={SigninScreen} />
           <Stack.Screen name={NAVIGATION.SIGNUP} component={SignupScreen} />
+          <Stack.Screen name={NAVIGATION.HOME} component={Homescreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  } else if (user) {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}>
           <Stack.Screen name={NAVIGATION.HOME} component={Homescreen} />
         </Stack.Navigator>
       </NavigationContainer>

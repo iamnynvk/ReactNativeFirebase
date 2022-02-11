@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import ProgressDialog from 'react-native-progress-dialog';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // components
 import FormButton from '../../components/FormButton';
@@ -99,9 +100,7 @@ const SigninScreen = ({navigation}) => {
         <TouchableOpacity
           style={styles.forgotButton}
           onPress={() => navigation.navigate(NAVIGATION.SIGNUP)}>
-          <Text style={[styles.navButtonText, {color: 'red'}]}>
-            Create here
-          </Text>
+          <Text style={[styles.navButtonText, {color: 'red'}]}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

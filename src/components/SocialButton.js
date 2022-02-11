@@ -35,7 +35,7 @@ const SocialButton = ({
 const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 10,
-    width: width,
+    width: width / 1.1,
     height: height / 15,
     padding: 10,
     alignItems: 'center',

@@ -1,10 +1,22 @@
-import {View, Text} from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
+import {View, Text, Button, Alert} from 'react-native';
 
-const Homescreen = () => {
+import {AuthContext} from '../../navigation/AuthProvider';
+import {NAVIGATION} from '../../navigation/navigation';
+
+const Homescreen = ({navigation}) => {
+  console.log('Homescreen :', navigation);
+  const {logout} = useContext(AuthContext);
   return (
     <View>
       <Text>Homescreen</Text>
+      <Button
+        title="Logout"
+        onPress={() => {
+          logout();
+          navigation.replace('Signin');
+        }}
+      />
     </View>
   );
 };
