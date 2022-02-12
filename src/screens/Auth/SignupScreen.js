@@ -13,8 +13,6 @@ import ProgressDialog from 'react-native-progress-dialog';
 // components
 import FormButton from '../../components/FormButton';
 import FormInput from '../../components/FormInput';
-import SocialButton from '../../components/SocialButton';
-import {NAVIGATION} from '../../navigation/navigation';
 
 // Import Context
 import {AuthContext} from '../../navigation/AuthProvider';
@@ -63,7 +61,7 @@ const SignupScreen = ({navigation}) => {
       signUpData(nameValue, emailValue, mobilenoValue);
       setTimeout(() => {
         showToast();
-        navigation.navigate(NAVIGATION.SIGNIN);
+        navigation.navigate('Signin');
         setVisible(false);
       }, 2000);
     }
@@ -368,7 +366,7 @@ const SignupScreen = ({navigation}) => {
         <Text style={styles.navButtonText}>Have an account ? </Text>
         <TouchableOpacity
           style={styles.forgotButton}
-          onPress={() => navigation.navigate(NAVIGATION.SIGNIN)}>
+          onPress={() => navigation.navigate('Signin')}>
           <Text style={[styles.navButtonText, {color: 'red'}]}>Sign In</Text>
         </TouchableOpacity>
       </View>

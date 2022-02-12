@@ -6,7 +6,6 @@ import {
   signInWithEmail,
   logOut,
 } from '../util/firebase';
-import {NAVIGATION} from './navigation';
 
 export const AuthContext = createContext({});
 
@@ -25,7 +24,7 @@ export const AuthProvider = ({children, Navigation}) => {
           try {
             await signUpWithEmail(email, password);
           } catch (e) {
-            console.log('Sign up - error', e);
+            console.log(e);
           }
         },
 
@@ -33,7 +32,7 @@ export const AuthProvider = ({children, Navigation}) => {
           try {
             await signUpStoreData(name, email, mobile);
           } catch (e) {
-            console.log('Sign in Data Store - error', e);
+            console.log(e);
           }
         },
 
@@ -41,14 +40,14 @@ export const AuthProvider = ({children, Navigation}) => {
           try {
             await signInWithEmail(email, password);
           } catch (e) {
-            console.log('Sign in - error', e);
+            console.log(e);
           }
         },
 
         logout: async () => {
           try {
             await logOut();
-            Navigation.replace(NAVIGATION.SIGNIN);
+            Navigation.replace('Signin');
           } catch (e) {
             console.log(e);
           }

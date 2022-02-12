@@ -1,11 +1,11 @@
 import React from 'react';
 import {AuthProvider} from './AuthProvider';
-import StackNavigator from './StackNavigator';
+import Routes from './Routes';
 
 const index = () => {
   return (
     <AuthProvider>
-      <StackNavigator />
+      <Routes />
     </AuthProvider>
   );
 };

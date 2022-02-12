@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {LogBox, View, Text} from 'react-native';
 import Providers from './src/navigation/';
 // import auth from '@react-native-firebase/auth';

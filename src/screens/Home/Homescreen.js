@@ -1,8 +1,7 @@
 import React, {useContext} from 'react';
-import {View, Text, Button, Alert} from 'react-native';
+import {View, Text, Button} from 'react-native';
 
 import {AuthContext} from '../../navigation/AuthProvider';
-import {NAVIGATION} from '../../navigation/navigation';
 
 const Homescreen = ({navigation}) => {
   console.log('Homescreen :', navigation);

@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import ProgressDialog from 'react-native-progress-dialog';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // components
 import FormButton from '../../components/FormButton';
@@ -17,7 +16,6 @@ import SocialButton from '../../components/SocialButton';
 
 // assets
 import images from '../../constants/images';
-import {NAVIGATION} from '../../navigation/navigation';
 
 // context
 import {AuthContext} from '../../navigation/AuthProvider';
@@ -34,7 +32,7 @@ const SigninScreen = ({navigation}) => {
     setTimeout(() => {
       login(email, password);
       setVisible(false);
-      navigation.replace(NAVIGATION.HOME);
+      navigation.replace('Home');
     }, 1000);
   };
 
@@ -99,7 +97,7 @@ const SigninScreen = ({navigation}) => {
         <Text style={styles.navButtonText}>Don't have an acount? </Text>
         <TouchableOpacity
           style={styles.forgotButton}
-          onPress={() => navigation.navigate(NAVIGATION.SIGNUP)}>
+          onPress={() => navigation.navigate('Signup')}>
           <Text style={[styles.navButtonText, {color: 'red'}]}>Sign Up</Text>
         </TouchableOpacity>
       </View>
