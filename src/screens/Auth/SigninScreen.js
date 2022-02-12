@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState, useEffect, useRef, createRef} from 'react';
 import {
   View,
   Text,
@@ -23,17 +23,78 @@ import {AuthContext} from '../../navigation/AuthProvider';
 const SigninScreen = ({navigation}) => {
   const {login} = useContext(AuthContext);
 
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [data, setData] = useState({
+    email: {value: '', error: '', isValid: false},
+    password: {value: '', error: '', isValid: false},
+  });
+
   const [visible, setVisible] = useState(false);
 
   const HandlerLogin = async () => {
+    const emailValue = data.email.value;
+    const passwordValue = data.password.value;
+
     setVisible(true);
+    login(emailValue, passwordValue);
     setTimeout(() => {
-      login(email, password);
       setVisible(false);
       navigation.replace('Home');
     }, 1000);
+  };
+
+  // Email is Valid or not
+  const emailHandler = () => {
+    const {value} = data.email;
+
+    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (reg.test(value) === false) {
+      setData({
+        ...data,
+        email: {
+          value: value,
+          error: 'Please! Enter Valid Email',
+          isValid: false,
+        },
+      });
+    } else {
+      setData({...data, email: {...data.email, isValid: true}});
+    }
+  };
+
+  // Password Valid or not
+  const passwordHandler = () => {
+    const {value} = data.password;
+
+    // Check length of password
+    let passwordSize = value.length;
+
+    if (passwordSize == 0) {
+      setData({
+        ...data,
+        password: {
+          value: value,
+          error: 'Password is required feild',
+          isValid: false,
+        },
+      });
+    } else if (passwordSize < 8 || passwordSize > 20) {
+      setData({
+        ...data,
+        password: {
+          value: value,
+          error: 'Password should be min 8 char and max 20 char',
+          isValid: false,
+        },
+      });
+    } else {
+      setData({
+        ...data,
+        password: {
+          ...data.password,
+          isValid: true,
+        },
+      });
+    }
   };
 
   return (
@@ -46,8 +107,11 @@ const SigninScreen = ({navigation}) => {
       <Image source={images.logo} style={styles.logo} />
 
       <FormInput
-        labelValue={email}
-        onChangeText={userEmail => setEmail(userEmail)}
+        labelValue={data.email.value}
+        onChangeText={text => {
+          setData({...data, email: {value: text}});
+        }}
+        onBlur={emailHandler}
         placeholderText="Email"
         iconType="user"
         keyboardType="email-address"
@@ -55,13 +119,28 @@ const SigninScreen = ({navigation}) => {
         autoCorrect={false}
       />
 
+      <View style={{width: '100%', marginBottom: 5}}>
+        <Text style={{color: 'red', fontSize: 12, fontWeight: 'bold'}}>
+          {data.email.error}
+        </Text>
+      </View>
+
       <FormInput
-        labelValue={password}
-        onChangeText={userPassword => setPassword(userPassword)}
+        labelValue={data.password.value}
+        onChangeText={text => {
+          setData({...data, password: {value: text}});
+        }}
+        onBlur={passwordHandler}
         placeholderText="Password"
         iconType="lock"
         secureTextEntry={true}
       />
+
+      <View style={{width: '100%', marginBottom: 5}}>
+        <Text style={{color: 'red', fontSize: 12, fontWeight: 'bold'}}>
+          {data.password.error}
+        </Text>
+      </View>
 
       <FormButton buttonTitle="Sign In" onPress={HandlerLogin} />
 
