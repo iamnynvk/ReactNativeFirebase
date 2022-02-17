@@ -6,7 +6,7 @@ import {AuthContext} from '../../navigation/AuthProvider';
 const Homescreen = ({navigation}) => {
   console.log('Homescreen Navigation :', navigation);
   return (
-    <View>
+    <View style={{flex: 1, backgroundColor: '#FEFEFE'}}>
       <Text>Homescreen</Text>
     </View>
   );

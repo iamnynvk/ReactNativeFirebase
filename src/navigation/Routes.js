@@ -6,6 +6,7 @@ import {AuthContext} from './AuthProvider';
 // Main Screens
 import AuthStack from './AuthStack';
 import AppStack from './AppStack';
+import TabNavigator from './TabNavigator';
 
 const Routes = () => {
   const {user, setUser} = useContext(AuthContext);
@@ -27,7 +28,7 @@ const Routes = () => {
 
   return (
     <NavigationContainer>
-      {user ? <AppStack /> : <AuthStack />}
+      {user ? <TabNavigator /> : <AuthStack />}
     </NavigationContainer>
   );
 };
