@@ -1,6 +1,7 @@
 import React, {createContext, useState} from 'react';
 
 import {
+  getAuthUserId,
   signUpWithEmail,
   signUpStoreData,
   signInWithEmail,

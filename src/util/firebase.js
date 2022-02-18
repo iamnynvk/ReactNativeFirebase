@@ -5,6 +5,7 @@ import auth, {firebase, getAuth} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 const firebaseAuth = auth();
+export const getAuthUserId = () => firebaseAuth.currentUser?.uid;
 
 /**
  *
@@ -40,8 +41,9 @@ export const signUpWithEmail = (email, password) => {
 export const signUpStoreData = (name, email, mobile) => {
   return new Promise((resolve, reject) => {
     firestore()
-      .collection('Users')
-      .add({
+      .collection('Users_data')
+      .doc()
+      .set({
         name: name,
         email: email,
         mobile: mobile,

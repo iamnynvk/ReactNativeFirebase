@@ -5,7 +5,6 @@ import {AuthContext} from './AuthProvider';
 
 // Main Screens
 import AuthStack from './AuthStack';
-import AppStack from './AppStack';
 import TabNavigator from './TabNavigator';
 
 const Routes = () => {
